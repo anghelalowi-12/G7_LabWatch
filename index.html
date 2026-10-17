@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LabWatch | Computer Laboratory Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="loginView" class="login-shell hidden">
+    <div class="login-brand">
+      <div class="brand-mark">LW</div>
+      <h1>LabWatch</h1>
+      <p>Computer Laboratory Management System</p>
+      <p class="muted-light">Report issues. Track repairs. Keep the lab running.</p>
+    </div>
+    <form id="loginForm" class="login-card">
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to continue to your workspace.</p>
+      <label>Email or username<input name="username" autocomplete="username" required placeholder="Enter your username"></label>
+      <label>Account type<select name="role" required><option value="Student">Student</option><option value="Technician">Technician</option></select></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Enter your password"></label>
+      <p id="loginError" class="error-text" role="alert"></p>
+      <button class="btn primary full" type="submit">Sign In</button>
+      <button class="btn text full" type="button" id="showSignup">Create a new account</button>
+      <p class="tiny muted">Prototype accounts are saved in this browser. For a real deployment, connect a secure backend.</p>
+    </form>
+
+    <form id="signupForm" class="login-card hidden">
+      <h2>Create your account</h2>
+      <p class="muted">Choose the workspace that matches your role.</p>
+      <label>Full name<input name="name" required autocomplete="name" placeholder="Enter your full name"></label>
+      <label>Email or username<input name="username" required autocomplete="username" placeholder="Choose a username or email"></label>
+      <label>Password<input name="password" type="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters"></label>
+      <label>Account type<select name="role" required><option value="Student">Student</option><option value="Technician">Technician</option></select></label>
+      <p id="signupError" class="error-text" role="alert"></p>
+      <button class="btn primary full" type="submit">Create Account</button>
+      <button class="btn text full" type="button" id="showLogin">Already have an account? Sign in</button>
+    </form>
+  </div>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#" data-page="dashboard"><span class="brand-mark small">LW</span><span>LabWatch</span></a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav id="mainNav">
+        <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-item" data-page="incidents"><span>⚑</span> Incidents</button>
+        <button class="nav-item" data-page="inventory"><span>▣</span> Inventory</button>
+        <button class="nav-item" data-page="report"><span>＋</span> Report an Issue</button>
+        <button class="nav-item" data-page="maintenance"><span>🔧</span> Maintenance</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="avatar" id="userAvatar">AJ</div>
+        <div class="user-meta"><strong id="userName">Alex Johnson</strong><span id="userRole">Technician</span></div>
+        <button id="logoutBtn" class="logout" title="Sign out" aria-label="Sign out">↪</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">COMPUTER LABORATORY</div>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <span class="connection-pill"><span class="dot"></span><span id="connectionText">Demo data</span></span>
+          <button class="icon-button" id="refreshBtn" title="Refresh data" aria-label="Refresh data">↻</button>
+        </div>
+      </header>
+      <div id="notice" class="notice hidden" role="status"></div>
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-row">
+          <div><h2>Welcome back, <span id="welcomeName">Alex</span>!</h2><p class="muted">Here’s what’s happening in the computer lab today.</p></div>
+          <button class="btn primary" data-go="report">＋ Report an Issue</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Total Computers</div><div class="stat-value" id="statComputers">30</div><div class="stat-foot">Registered workstations</div></article>
+          <article class="stat-card"><div class="stat-icon orange">⚑</div><div class="stat-label">Open Incidents</div><div class="stat-value" id="statIncidents">5</div><div class="stat-foot">Awaiting resolution</div></article>
+          <article class="stat-card"><div class="stat-icon purple">🔧</div><div class="stat-label">Ongoing Repairs</div><div class="stat-value" id="statRepairs">4</div><div class="stat-foot">Currently in progress</div></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div class="stat-label">Available Workstations</div><div class="stat-value" id="statAvailable">22</div><div class="stat-foot">Ready for use</div></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Computer Lab Status</h3><p class="muted">Current workstation availability</p></div></div>
+            <div class="status-summary">
+              <div class="donut"><div><strong id="donutTotal">30</strong><span>Total PCs</span></div></div>
+              <div class="legend">
+                <div><i class="legend-dot green-bg"></i> Available <strong id="legendAvailable">22</strong></div>
+                <div><i class="legend-dot blue-bg"></i> In Use <strong id="legendInUse">6</strong></div>
+                <div><i class="legend-dot orange-bg"></i> Under Repair <strong id="legendRepair">2</strong></div>
+                <div><i class="legend-dot red-bg"></i> Out of Service <strong id="legendOut">0</strong></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Recent Incidents</h3><p class="muted">Latest reported issues</p></div><button class="link-button" data-go="incidents">View all →</button></div>
+            <div id="recentIncidents" class="recent-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-incidents">
+        <div class="toolbar">
+          <input id="incidentSearch" class="search-input" placeholder="Search by ticket ID, computer, or issue…" aria-label="Search incidents">
+          <select id="incidentStatusFilter" aria-label="Filter by status"><option value="">All statuses</option><option>Pending</option><option>In Progress</option><option>Waiting for Parts</option><option>Resolved</option><option>Closed</option></select>
+          <select id="incidentPriorityFilter" aria-label="Filter by priority"><option value="">All priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
+          <button class="btn primary" data-go="report">＋ New Incident</button>
+        </div>
+        <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Ticket ID</th><th>Computer</th><th>Issue Description</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Date Reported</th><th>Actions</th></tr></thead><tbody id="incidentsTable"></tbody></table></div><div id="incidentsEmpty" class="empty hidden">No incidents match your filters.</div></article>
+      </section>
+
+      <section class="page" id="page-inventory">
+        <div class="toolbar">
+          <input id="inventorySearch" class="search-input" placeholder="Search by asset ID, name, or location…" aria-label="Search inventory">
+          <select id="inventoryTypeFilter" aria-label="Filter by type"><option value="">All equipment types</option><option>Computer</option><option>Keyboard</option><option>Mouse</option><option>Monitor</option><option>Other</option></select>
+          <select id="inventoryStatusFilter" aria-label="Filter by status"><option value="">All statuses</option><option>Available</option><option>In Use</option><option>Under Repair</option><option>Missing</option><option>Out of Service</option></select>
+          <button class="btn primary" id="addEquipmentBtn">＋ Add Equipment</button>
+        </div>
+        <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Asset ID</th><th>Type</th><th>Name / Model</th><th>Location</th><th>Status</th><th>Condition</th><th>Actions</th></tr></thead><tbody id="inventoryTable"></tbody></table></div><div id="inventoryEmpty" class="empty hidden">No equipment matches your filters.</div></article>
+      </section>
+
+      <section class="page" id="page-report">
+        <article class="panel form-panel">
+          <div class="form-intro"><div class="stat-icon blue">＋</div><div><h2>Report an Issue</h2><p class="muted">Describe the problem and our lab team will review it.</p></div></div>
+          <form id="reportForm" class="issue-form">
+            <div class="form-grid">
+              <label>Issue Type <span class="required">*</span><select name="type" required><option value="">Select issue type</option><option>Computer Issue</option><option>Peripheral Issue</option><option>Network Issue</option><option>Software Issue</option><option>Missing Equipment</option><option>Other</option></select></label>
+              <label>Computer / Asset <span class="required">*</span><select name="assetId" id="reportAsset" required><option value="">Select a computer or asset</option></select></label>
+              <label>Issue Category <span class="required">*</span><select name="category" required><option value="">Select a category</option><option>Won't Turn On</option><option>Hardware Damage</option><option>Keyboard or Mouse</option><option>Internet Connection</option><option>Software Not Working</option><option>Missing Equipment</option><option>Performance Issue</option><option>Other</option></select></label>
+              <label>Priority <span class="required">*</span><select name="priority" required><option>Medium</option><option>Low</option><option>High</option></select></label>
+              <label class="full-span">Issue Description <span class="required">*</span><textarea name="description" rows="5" required minlength="10" placeholder="Describe what happened, what you observed, and when it started…"></textarea></label>
+            </div>
+            <div class="form-footer"><p class="muted tiny">Do not include passwords or other sensitive personal information.</p><button class="btn primary" type="submit">Submit Report →</button></div>
+          </form>
+        </article>
+      </section>
+
+      <section class="page" id="page-maintenance">
+        <div class="toolbar"><input id="maintenanceSearch" class="search-input" placeholder="Search asset, issue, or technician…" aria-label="Search maintenance"><button class="btn primary" id="scheduleBtn">＋ Schedule Maintenance</button></div>
+        <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Asset ID</th><th>Type</th><th>Work Performed / Issue</th><th>Technician</th><th>Status</th></tr></thead><tbody id="maintenanceTable"></tbody></table></div><div id="maintenanceEmpty" class="empty hidden">No maintenance records found.</div></article>
+      </section>
+      <footer class="footer">LabWatch · Computer Laboratory Management System <span>Frontend prototype</span></footer>
+    </main>
+  </div>
+
+  <dialog id="detailDialog" class="modal"><form method="dialog"><button class="modal-close" aria-label="Close">×</button></form><div id="dialogContent"></div></dialog>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
